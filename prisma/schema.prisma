@@ -12,6 +12,8 @@ model User {
   name          String?
   email         String?         @unique
   password      String
+
+  permissions   UserPermissions[]   @relation("user_permissions")
 }
 
 model Account {
@@ -40,4 +42,15 @@ model Session {
   accessToken       String          @unique @map(name: "access_token")
   createdAt         DateTime        @default(now()) @map(name: "created_at")
   updatedAt         DateTime        @default(now()) @map(name: "updated_at")
+}
+
+model UserPermissions {
+    id            String          @default(cuid()) @id
+    policyKey      String
+
+    user           User          @relation(fields: [userId], references: [id], name: "user_permissions")
+    userId         String
+
+    createdAt          DateTime  @default(now()) @map(name: "created_at")
+    updatedAt          DateTime  @default(now()) @map(name: "updated_at")
 }

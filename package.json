@@ -8,7 +8,8 @@
     "start": "prisma generate; next start",
     "lint": "prisma generate; next lint",
     "update-db": "prisma db push",
-    "start-prisma-client": "prisma studio"
+    "prisma:start": "prisma studio",
+    "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^4.15.0",

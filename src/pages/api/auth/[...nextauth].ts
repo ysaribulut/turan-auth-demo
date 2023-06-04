@@ -2,8 +2,9 @@ import { compare } from "bcryptjs";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "../../../lib/prisma";
+import type { NextAuthOptions } from "next-auth";
 
-export default NextAuth({
+export const nextAuthOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
     maxAge: 365 * 24 * 60 * 60,
@@ -58,14 +59,23 @@ export default NextAuth({
         };
       }
 
+      const permissions = await prisma.userPermissions.findMany({
+        where: {
+          userId: result.id,
+        },
+      });
+
       return {
         ...session,
         user: {
           id: result.id,
           email: result.email,
           name: result.name,
+          permissions: permissions.map((m) => m.policyKey),
         },
       };
     },
   },
-});
+};
+
+export default NextAuth(nextAuthOptions);
